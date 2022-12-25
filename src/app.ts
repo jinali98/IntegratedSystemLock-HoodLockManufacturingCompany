@@ -8,6 +8,7 @@ import schedule from "node-schedule";
 import errorResponseHandler from "../utils/errorResponseHandler";
 import globalErrorHandler from "./api/error/error.controller";
 import LoggerGlobal from "../logger/loggerSingelton";
+import authRouter from "./api/auth/auth.controller";
 
 const logger = LoggerGlobal.getInstance().logger;
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 // CRON JOBS
 
 // ROUTES
+app.use("/api/v1/auth", authRouter);
 
 // ERROR HANDLER MIDDLEWARE FOR ROUTES
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
