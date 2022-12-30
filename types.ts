@@ -18,6 +18,34 @@ export type AdminUserType = {
   email: string;
   password: string;
   dept: string;
+  deptid: string;
+};
+export type JobType = {
+  _id?: object;
+  jobid: string;
+  unitid: string;
+  email: string;
+  password: string;
+  dept: string;
+  expected_start_date: string;
+  expected_end_date: string;
+  allocated_hours: string;
+  actual_start_date: string;
+  actual_finish_date: string;
+  status: string;
+  description: string;
+  assigned_emp_id: string;
+  created_date: string;
+};
+export type EmployeeType = {
+  _id?: object;
+  unitid: string;
+  email: string;
+  contactNumber: string;
+  firstName: string;
+  lastName: string;
+  empid: string;
+  designation: string;
 };
 
 export interface GlobalErroHandlerInterface {
@@ -42,4 +70,11 @@ export interface TokenServicesInterface {
     user: AdminUserType | any,
     next: NextFunction
   ): Promise<NextFunction | any>;
+}
+export interface AuthorizeUserServicesInterface {
+  checkUserRoleAdminED(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<NextFunction | void>;
 }
