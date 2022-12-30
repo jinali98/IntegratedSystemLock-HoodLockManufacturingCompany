@@ -9,6 +9,9 @@ import errorResponseHandler from "../utils/errorResponseHandler";
 import globalErrorHandler from "./api/error/error.controller";
 import LoggerGlobal from "../logger/loggerSingelton";
 import authRouter from "./api/auth/auth.controller";
+import employeeRouter from "./api/employee/employee.contrlloer";
+import jobRouter from "./api/job/job.controller";
+import unitRouter from "./api/unit/unit.contoller";
 
 const logger = LoggerGlobal.getInstance().logger;
 
@@ -27,6 +30,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // ROUTES
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/employee", employeeRouter);
+app.use("/api/v1/job", jobRouter);
+app.use("/api/v1/units", unitRouter);
 
 // ERROR HANDLER MIDDLEWARE FOR ROUTES
 app.all("*", (req: Request, res: Response, next: NextFunction) => {

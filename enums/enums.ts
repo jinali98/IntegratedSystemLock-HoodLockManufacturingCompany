@@ -1,4 +1,3 @@
-
 export enum ResponseStatus {
   SUCCESS = "Success",
   FAILED = "Failed",
@@ -21,9 +20,59 @@ export enum Departments {
   RDD = "Research and Development Department",
   SMD = "Sales & Marketing Department",
   PD = "Purchasing Department",
-  FD = "Finane Department",
+  FD = "Finanse Department",
   ITD = "Information and Technology Department",
   EDD = "Engineering Design Department",
   ED = "Engineering Department",
   FMD = "Factory Management Department",
+  HM = "Higher Management",
+}
+export enum Units {
+  LBU = "Lock Barrel",
+  KSU = "Key Setting",
+  LAU = "Lock Assembly",
+  LMU = "Lock Machining",
+  MU = "Moulding",
+  EEU = "Electrical and Electronics",
+  RDW = "R and D workshop",
+  FU = "Fabrication",
+  PCTU = "Painting and Chemical Treatment",
+  WHU = "Warehouse Unit",
+}
+
+export enum DepartmentsCode {
+  HRD = "HRD",
+  RDD = "RDD",
+  SMD = "SMD",
+  PD = "PD",
+  FD = "FD",
+  ITD = "ITD",
+  EDD = "EDD",
+  ED = "ED",
+  FMD = "FMD",
+  HM = "HM",
+}
+export enum UnitsCodes {
+  LBU = "LBU",
+  KSU = "KSU",
+  LAU = "LAU",
+  LMU = "LMU",
+  MU = "MU",
+  EEU = "EEU",
+  RDW = "RDW",
+  FU = "FU",
+  PCTU = "PCTU",
+  WHU = "WHU",
+}
+
+export enum JobStatus {
+  BACKLOG = "backlog",
+  INPROGRESS = "inprogress",
+  TESTING = "testing",
+  DONE = "done",
+}
+
+export enum Designation {
+  SUPERVISOR = "supervisor",
+  EMPLOYEE = "employee",
 }

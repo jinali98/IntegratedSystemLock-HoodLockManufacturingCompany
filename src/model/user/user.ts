@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide the email address"],
     unique: true,
-    lowercase: true,
     trim: true,
   },
   password: {
@@ -19,6 +18,10 @@ const userSchema = new mongoose.Schema({
   dept: {
     type: String,
     required: [true, "Please provide a valid department"],
+  },
+  deptid: {
+    type: String,
+    required: [true, "Please provide a valid department id"],
   },
 });
 
