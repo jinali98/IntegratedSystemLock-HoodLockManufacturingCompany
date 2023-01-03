@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Departments, ErrorMessages } from "../../../enums/enums";
+import { Departments, ErrorMessages, Units } from "../../../enums/enums";
 import { AuthorizeUserServicesInterface } from "../../../types";
 import errorResponseHandler from "../../../utils/errorResponseHandler";
 
@@ -30,6 +30,12 @@ export class AuthorizeUsersService implements AuthorizeUserServicesInterface {
   }
   async checkUserRoleAdminPD(req: Request, res: Response, next: NextFunction) {
     if (req.user.dept !== Departments.PD) {
+      return next(errorResponseHandler(403, ErrorMessages.UNAUTHORIZED_USER));
+    }
+    next();
+  }
+  async checkUserRoleAdminWHU(req: Request, res: Response, next: NextFunction) {
+    if (req.user.dept !== Units.WHU) {
       return next(errorResponseHandler(403, ErrorMessages.UNAUTHORIZED_USER));
     }
     next();

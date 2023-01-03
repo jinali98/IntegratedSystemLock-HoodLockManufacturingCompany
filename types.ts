@@ -37,6 +37,27 @@ export type JobType = {
   assigned_emp_id: string;
   created_date: string;
 };
+export type SaleType = {
+  _id?: object;
+  saleid: string;
+  productid: string;
+  totalSoldQty: number;
+  pricePerUnit: number;
+  periodStartDate: string;
+  periodEndDate: string;
+};
+export type ProductType = {
+  _id?: object;
+  productid: string;
+  productName: string;
+  productDescription: string;
+};
+export type InventoryType = {
+  _id?: object;
+  materialid: string;
+  materialName: string;
+};
+
 export type EmployeeType = {
   _id?: object;
   unitid: string;

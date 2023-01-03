@@ -12,6 +12,9 @@ import authRouter from "./api/auth/auth.controller";
 import employeeRouter from "./api/employee/employee.contrlloer";
 import jobRouter from "./api/job/job.controller";
 import unitRouter from "./api/unit/unit.contoller";
+import salesRouter from "./api/sale/sale.controller";
+import productRouter from "./api/product/product.controller";
+import inventoryRouter from "./api/inventory/inventory.controller";
 
 const logger = LoggerGlobal.getInstance().logger;
 
@@ -33,6 +36,9 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/employee", employeeRouter);
 app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/units", unitRouter);
+app.use("/api/v1/sale", salesRouter);
+app.use("/api/v1/product", productRouter);
+app.use("/api/v1/inventory", inventoryRouter);
 
 // ERROR HANDLER MIDDLEWARE FOR ROUTES
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
