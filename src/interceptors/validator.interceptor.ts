@@ -93,4 +93,53 @@ export class UserInputValidators {
 
     next();
   }
+  createProductValidator(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      productName: Joi.string().required(),
+      productDescription: Joi.string().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
+  createSaleValidator(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      productid: Joi.string().required(),
+      totalSoldQty: Joi.number().required(),
+      pricePerUnit: Joi.number().required(),
+      periodStartDate: Joi.string().required(),
+      periodEndDate: Joi.string().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
+  createInvenotryValidator(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      materialName: Joi.string().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
+  updateInventoryValidator(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      materialName: Joi.string().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
 }
