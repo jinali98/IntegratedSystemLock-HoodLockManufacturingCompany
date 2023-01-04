@@ -142,4 +142,26 @@ export class UserInputValidators {
 
     next();
   }
+  whProcessOrderValidator(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      requestedQty: Joi.number().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
+  pdUpdateOrderValidator(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      pricePerUnit: Joi.number().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
 }

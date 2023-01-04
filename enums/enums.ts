@@ -71,6 +71,12 @@ export enum JobStatus {
   TESTING = "testing",
   DONE = "done",
 }
+export enum orderReqStatus {
+  CREATED = "created",
+  SENT = "sent",
+  PROCESSING = "processing",
+  COMPLETED = "completed",
+}
 
 export enum Designation {
   SUPERVISOR = "supervisor",

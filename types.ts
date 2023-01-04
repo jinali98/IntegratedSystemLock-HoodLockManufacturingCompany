@@ -52,6 +52,12 @@ export type ProductType = {
   productName: string;
   productDescription: string;
 };
+export type OrderRequestType = {
+  _id?: object;
+  productid: string;
+  productName: string;
+  productDescription: string;
+};
 export type InventoryType = {
   _id?: object;
   materialid: string;
