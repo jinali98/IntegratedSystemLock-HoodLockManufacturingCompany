@@ -40,6 +40,7 @@ export class AuthenticationServices {
         data: {
           user: {
             userDept: this.adminUser.dept,
+            userDeptid: this.adminUser.deptid,
           },
         },
       });
