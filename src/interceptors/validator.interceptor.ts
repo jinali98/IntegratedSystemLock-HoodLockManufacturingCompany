@@ -46,6 +46,7 @@ export class UserInputValidators {
     const schema = Joi.object({
       jobid: Joi.string().required(),
       empid: Joi.string().required(),
+      materials: Joi.array().required()
     });
     const errorState = schema.validate(req.body);
 
@@ -156,6 +157,39 @@ export class UserInputValidators {
   pdUpdateOrderValidator(req: Request, res: Response, next: NextFunction) {
     const schema = Joi.object({
       pricePerUnit: Joi.number().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
+  createInventoryUnitValidator(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const schema = Joi.object({
+      materialid: Joi.string().required(),
+      availableQty: Joi.number().required(),
+      lowLevelQty: Joi.number().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
+  updateInventoryUnitValidator(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const schema = Joi.object({
+      lowLevelQty: Joi.number().required(),
+      materialid: Joi.string().required(),
     });
     const errorState = schema.validate(req.body);
 

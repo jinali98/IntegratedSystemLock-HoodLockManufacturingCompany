@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AdminUserType, JobType } from "../../../types";
+import { JobType } from "../../../types";
 import LoggerGlobal from "../../../logger/loggerSingelton";
 import errorResponseHandler from "../../../utils/errorResponseHandler";
 import {
@@ -10,6 +10,7 @@ import {
 } from "../../../enums/enums";
 import { customAlphabet } from "nanoid";
 import { Job } from "../../model/job/job";
+import { InvenotryUnit } from "../../model/inventoryUnit/inventoryUnit";
 const nanoid = customAlphabet("1234567890abcdef", 5);
 const logger = LoggerGlobal.getInstance().logger;
 
@@ -74,12 +75,30 @@ export class JobServices {
     res: Response,
     next: NextFunction
   ) {
-    const { jobid, empid } = req.body;
+    const { jobid, empid, materials } = req.body;
     try {
-      await Job.findOneAndUpdate(
+      const job = await Job.findOneAndUpdate(
         { jobid },
-        { empid, actualStartDate: new Date(), status: JobStatus.INPROGRESS }
+        {
+          empid,
+          actualStartDate: new Date(),
+          status: JobStatus.INPROGRESS,
+          materials,
+        }
       );
+
+      for (const item of materials) {
+        const items = await InvenotryUnit.findOne({
+          materialid: item.materialid,
+          unitid: job.unitid,
+        });
+        await InvenotryUnit.findOneAndUpdate(
+          { materialid: item.materialid, unitid: job.unitid },
+          {
+            availableQty: items.availableQty - item.qty,
+          }
+        );
+      }
 
       res.status(200).json({
         status: ResponseStatus.SUCCESS,

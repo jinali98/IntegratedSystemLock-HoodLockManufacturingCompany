@@ -16,6 +16,7 @@ import salesRouter from "./api/sale/sale.controller";
 import productRouter from "./api/product/product.controller";
 import inventoryRouter from "./api/inventory/inventory.controller";
 import orderRequestsRouter from "./api/orderReq/orderReq.controller";
+import inventoryUnitRouter from "./api/inventoryUnit/inventoryUnit.controller";
 
 const logger = LoggerGlobal.getInstance().logger;
 
@@ -41,6 +42,7 @@ app.use("/api/v1/sale", salesRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/inventory", inventoryRouter);
 app.use("/api/v1/order-req", orderRequestsRouter);
+app.use("/api/v1/inventory-unit", inventoryUnitRouter);
 
 // ERROR HANDLER MIDDLEWARE FOR ROUTES
 app.all("*", (req: Request, res: Response, next: NextFunction) => {

@@ -78,4 +78,14 @@ orderRequestsRouter.get(
   }
 );
 
+// report of all completed orders for a given period
+orderRequestsRouter.post(
+  "/report/completed-requests",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  async (req: Request, res: Response, next: NextFunction) => {
+    orderRequestsServices.getCompleteOrderRequestsForPeriod(req, res, next);
+  }
+);
+
 export default orderRequestsRouter;
