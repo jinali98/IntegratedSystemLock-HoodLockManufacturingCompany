@@ -63,6 +63,7 @@ export enum UnitsCodes {
   FU = "FU",
   PCTU = "PCTU",
   WHU = "WHU",
+  HM = "HM",
 }
 
 export enum JobStatus {

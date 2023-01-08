@@ -45,6 +45,9 @@ const jobSchema = new mongoose.Schema({
   status: {
     type: String,
   },
+  materials: {
+    type: [Object],
+  },
 });
 
 export const Job = mongoose.model("Job", jobSchema);

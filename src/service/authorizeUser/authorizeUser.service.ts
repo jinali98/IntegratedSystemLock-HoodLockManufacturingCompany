@@ -40,4 +40,10 @@ export class AuthorizeUsersService implements AuthorizeUserServicesInterface {
     }
     next();
   }
+  async checkUserRoleAdminHM(req: Request, res: Response, next: NextFunction) {
+    if (req.user.dept !== Departments.HM) {
+      return next(errorResponseHandler(403, ErrorMessages.UNAUTHORIZED_USER));
+    }
+    next();
+  }
 }
