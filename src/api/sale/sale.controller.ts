@@ -37,4 +37,15 @@ salesRouter.post(
   }
 );
 
+salesRouter.post(
+  "/report/sales-for-period",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    saleServices.getSalesForPeriod(req, res, next);
+  }
+);
+
 export default salesRouter;
