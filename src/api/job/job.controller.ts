@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction, Router } from "express";
-import { SanitizeInputs } from "../../interceptors/sanitize.interceptor";
-import { UserInputValidators } from "../../interceptors/validator.interceptor";
-import { TokenServices } from "../../service/token/token.service";
-import { AuthorizeUsersService } from "../../service/authorizeUser/authorizeUser.service";
-import { JobServices } from "../../service/job/job.service";
+import { Request, Response, NextFunction, Router } from 'express';
+import { SanitizeInputs } from '../../interceptors/sanitize.interceptor';
+import { UserInputValidators } from '../../interceptors/validator.interceptor';
+import { TokenServices } from '../../service/token/token.service';
+import { AuthorizeUsersService } from '../../service/authorizeUser/authorizeUser.service';
+import { JobServices } from '../../service/job/job.service';
 const jobRouter = Router();
 const jobServices = new JobServices();
 const sanitize = new SanitizeInputs();
@@ -12,14 +12,14 @@ const tokenService = new TokenServices();
 const authUser = new AuthorizeUsersService();
 
 jobRouter.get(
-  "/:unitid",
+  '/:unitid',
   tokenService.verifyUser,
   async (req: Request, res: Response, next: NextFunction) => {
     jobServices.getKanbanJobsByUnit(req, res, next);
   }
 );
 jobRouter.post(
-  "/",
+  '/',
   tokenService.verifyUser,
   authUser.checkUserRoleAdminED,
   sanitize.sanitizeUserInputs,
@@ -29,7 +29,7 @@ jobRouter.post(
   }
 );
 jobRouter.post(
-  "/assign",
+  '/assign',
   tokenService.verifyUser,
   sanitize.sanitizeUserInputs,
   validate.assignJobValidator,
@@ -38,7 +38,7 @@ jobRouter.post(
   }
 );
 jobRouter.post(
-  "/update",
+  '/update',
   tokenService.verifyUser,
   sanitize.sanitizeUserInputs,
   validate.updateJobValidator,
@@ -46,8 +46,21 @@ jobRouter.post(
     jobServices.updateKanbanJobStatus(req, res, next);
   }
 );
+
+// kavindra - completed tasks report for by a unit for a given period of time
+jobRouter.post(
+  '/report/completed-tasks/:unitid',
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    jobServices.reportOfCompletedJObsByUnitWithinAtime(req, res, next);
+  }
+);
+
 jobRouter.get(
-  "/complete/:jobid",
+  '/complete/:jobid',
   tokenService.verifyUser,
   sanitize.sanitizeUserInputs,
   async (req: Request, res: Response, next: NextFunction) => {
