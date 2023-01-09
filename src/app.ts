@@ -8,6 +8,15 @@ import schedule from "node-schedule";
 import errorResponseHandler from "../utils/errorResponseHandler";
 import globalErrorHandler from "./api/error/error.controller";
 import LoggerGlobal from "../logger/loggerSingelton";
+import authRouter from "./api/auth/auth.controller";
+import employeeRouter from "./api/employee/employee.contrlloer";
+import jobRouter from "./api/job/job.controller";
+import unitRouter from "./api/unit/unit.contoller";
+import salesRouter from "./api/sale/sale.controller";
+import productRouter from "./api/product/product.controller";
+import inventoryRouter from "./api/inventory/inventory.controller";
+import orderRequestsRouter from "./api/orderReq/orderReq.controller";
+import inventoryUnitRouter from "./api/inventoryUnit/inventoryUnit.controller";
 
 const logger = LoggerGlobal.getInstance().logger;
 
@@ -25,6 +34,15 @@ app.use(express.urlencoded({ extended: true }));
 // CRON JOBS
 
 // ROUTES
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/employee", employeeRouter);
+app.use("/api/v1/job", jobRouter);
+app.use("/api/v1/units", unitRouter);
+app.use("/api/v1/sale", salesRouter);
+app.use("/api/v1/product", productRouter);
+app.use("/api/v1/inventory", inventoryRouter);
+app.use("/api/v1/order-req", orderRequestsRouter);
+app.use("/api/v1/inventory-unit", inventoryUnitRouter);
 
 // ERROR HANDLER MIDDLEWARE FOR ROUTES
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
