@@ -48,4 +48,15 @@ salesRouter.post(
   }
 );
 
+salesRouter.post(
+  "/report/sales-for-period/:productid",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    saleServices.getSalesByProductForPeriod(req, res, next);
+  }
+);
+
 export default salesRouter;
