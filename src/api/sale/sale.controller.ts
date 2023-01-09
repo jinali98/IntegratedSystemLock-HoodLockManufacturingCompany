@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction, Router } from "express";
-import { SanitizeInputs } from "../../interceptors/sanitize.interceptor";
-import { UserInputValidators } from "../../interceptors/validator.interceptor";
-import { TokenServices } from "../../service/token/token.service";
-import { AuthorizeUsersService } from "../../service/authorizeUser/authorizeUser.service";
-import { ProductServices } from "../../service/product/product.service";
-import { SaleServices } from "../../service/sale/sale.service";
+import { Request, Response, NextFunction, Router } from 'express';
+import { SanitizeInputs } from '../../interceptors/sanitize.interceptor';
+import { UserInputValidators } from '../../interceptors/validator.interceptor';
+import { TokenServices } from '../../service/token/token.service';
+import { AuthorizeUsersService } from '../../service/authorizeUser/authorizeUser.service';
+import { ProductServices } from '../../service/product/product.service';
+import { SaleServices } from '../../service/sale/sale.service';
 const salesRouter = Router();
 const saleServices = new SaleServices();
 const sanitize = new SanitizeInputs();
@@ -13,21 +13,21 @@ const tokenService = new TokenServices();
 const authUser = new AuthorizeUsersService();
 
 salesRouter.get(
-  "/",
+  '/',
   tokenService.verifyUser,
   async (req: Request, res: Response, next: NextFunction) => {
     saleServices.getAllSalesRecords(req, res, next);
   }
 );
 salesRouter.get(
-  "/:saleid",
+  '/:saleid',
   tokenService.verifyUser,
   async (req: Request, res: Response, next: NextFunction) => {
     saleServices.getSaleById(req, res, next);
   }
 );
 salesRouter.post(
-  "/",
+  '/',
   tokenService.verifyUser,
   authUser.checkUserRoleAdminSMD,
   sanitize.sanitizeUserInputs,
@@ -38,7 +38,7 @@ salesRouter.post(
 );
 
 salesRouter.post(
-  "/report/sales-for-period",
+  '/report/sales-for-period',
   tokenService.verifyUser,
   authUser.checkUserRoleAdminHM,
   sanitize.sanitizeUserInputs,
@@ -50,7 +50,7 @@ salesRouter.post(
 
 // adithya report - sales record for a selected period of time for a certain product
 salesRouter.post(
-  "/report/sales-for-period/:productid",
+  '/report/sales-for-period/:productid',
   tokenService.verifyUser,
   authUser.checkUserRoleAdminHM,
   sanitize.sanitizeUserInputs,
@@ -62,7 +62,7 @@ salesRouter.post(
 
 // adithya report -monthly sales record for a certain product
 salesRouter.post(
-  "/report/monthly/:productid",
+  '/report/monthly/:productid',
   tokenService.verifyUser,
   authUser.checkUserRoleAdminHM,
   sanitize.sanitizeUserInputs,
@@ -72,4 +72,15 @@ salesRouter.post(
   }
 );
 
+// kavindra -yearly sales record for a certain product
+salesRouter.post(
+  '/report/yearly/:productid',
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeYearlyValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    saleServices.getYearlySalesByProduct(req, res, next);
+  }
+);
 export default salesRouter;
