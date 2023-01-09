@@ -37,4 +37,39 @@ salesRouter.post(
   }
 );
 
+salesRouter.post(
+  "/report/sales-for-period",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    saleServices.getSalesForPeriod(req, res, next);
+  }
+);
+
+// adithya report - sales record for a selected period of time for a certain product
+salesRouter.post(
+  "/report/sales-for-period/:productid",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    saleServices.getSalesByProductForPeriod(req, res, next);
+  }
+);
+
+// adithya report -monthly sales record for a certain product
+salesRouter.post(
+  "/report/monthly/:productid",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeMonthlyValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    saleServices.getMonthlySalesByProduct(req, res, next);
+  }
+);
+
 export default salesRouter;

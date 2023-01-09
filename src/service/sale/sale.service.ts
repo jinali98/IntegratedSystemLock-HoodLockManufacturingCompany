@@ -6,6 +6,11 @@ import { ErrorMessages, ResponseStatus } from "../../../enums/enums";
 import { customAlphabet } from "nanoid";
 import { Sale } from "../../model/sale/sale";
 import { Product } from "../../model/product/product";
+import {
+  salesByPeriod,
+  salesByProductByPeriod,
+} from "../../aggregators/aggregators";
+
 const nanoid = customAlphabet("1234567890abcdef", 5);
 const logger = LoggerGlobal.getInstance().logger;
 
@@ -78,6 +83,79 @@ export class SaleServices {
     } catch (err) {
       logger.error(err.message);
 
+      return next(
+        errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+      );
+    }
+  }
+
+
+
+
+  async getSalesForPeriod(req: Request, res: Response, next: NextFunction) {
+    const { from, to } = req.body;
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+
+    try {
+      const list = await salesByPeriod(fromDate, toDate);
+
+      res.status(200).json({
+        status: ResponseStatus.SUCCESS,
+        list,
+      });
+    } catch (err) {
+      logger.error(err.message);
+      return next(
+        errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+      );
+    }
+  }
+
+  async getSalesByProductForPeriod(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { from, to } = req.body;
+    const { productid } = req.params;
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+
+    try {
+      const list = await salesByProductByPeriod(fromDate, toDate, productid);
+
+      res.status(200).json({
+        status: ResponseStatus.SUCCESS,
+        list,
+      });
+    } catch (err) {
+      logger.error(err.message);
+      return next(
+        errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+      );
+    }
+  }
+
+  async getMonthlySalesByProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { month, year } = req.body;
+    const { productid } = req.params;
+    const fromDate = new Date(`${year}-${month}-01`);
+    const toDate = new Date(`${year}-${month}-31`);
+
+    try {
+      const list = await salesByProductByPeriod(fromDate, toDate, productid);
+
+      res.status(200).json({
+        status: ResponseStatus.SUCCESS,
+        list,
+      });
+    } catch (err) {
+      logger.error(err.message);
       return next(
         errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
       );

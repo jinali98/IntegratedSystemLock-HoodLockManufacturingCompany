@@ -198,4 +198,30 @@ export class UserInputValidators {
 
     next();
   }
+
+  dateRangeValidator(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      from: Joi.string().required(),
+      to: Joi.string().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
+
+  dateRangeMonthlyValidator(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      year: Joi.string().required(),
+      month: Joi.string().required(),
+    });
+    const errorState = schema.validate(req.body);
+
+    if (errorState.error)
+      return next(errorResponseHandler(400, ErrorMessages.EMPTY_INPUT_FIELDS));
+
+    next();
+  }
 }
