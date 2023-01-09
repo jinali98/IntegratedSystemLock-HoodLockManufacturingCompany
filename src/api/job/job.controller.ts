@@ -69,3 +69,15 @@ jobRouter.get(
 );
 
 export default jobRouter;
+
+// hasna - Tasks completed by emp within a given period
+jobRouter.post(
+  "/report/emp-completed/:empid",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    jobServices.completeJobsByEmpWithinSelectedTime(req, res, next);
+  }
+);

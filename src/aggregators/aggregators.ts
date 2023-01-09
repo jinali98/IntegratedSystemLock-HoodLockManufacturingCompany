@@ -1,5 +1,6 @@
 import { Sale } from '../model/sale/sale';
-import { Job } from '../model/job/job';
+import { Job } from "../model/job/job";
+
 
 //Kavindra jobsCompletedByUnitByPeriod
 export const jobsCompletedByUnitByPeriod = async (
@@ -76,5 +77,56 @@ export const salesByProductByPeriod = async (
       },
     },
     { $unwind: '$product' },
+  ]);
+};
+
+
+
+export const taskByEmpByPeriod = async (
+  from: Date,
+  to: Date,
+  empid: string
+) => {
+  return await Job.aggregate([
+    {
+      $match: {
+        actualFinishDate: {
+          $gte: from,
+          $lte: to,
+        },
+        empid,
+      },
+    },
+    {
+      $lookup: {
+        from: "employees",
+        localField: "empid",
+        foreignField: "empid",
+        as: "employee-details",
+      },
+    },
+    { $unwind: "$employee-details" },
+  ]);
+};
+
+export const salesByProduct = async (from: Date, to: Date) => {
+  return await Sale.aggregate([
+    {
+      $match: {
+        periodStartDate: {
+          $gte: from,
+          $lte: to,
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "productid",
+        foreignField: "productid",
+        as: "product",
+      },
+    },
+    { $unwind: "$product" },
   ]);
 };
