@@ -7,6 +7,7 @@ import {
   materialNameById,
   materialNameByIdByUnit,
 } from "../../aggregators/materialNameById";
+import { materials } from "../../aggregators/aggregators";
 const logger = LoggerGlobal.getInstance().logger;
 
 export class InventoryUnitServices {
@@ -95,6 +96,27 @@ export class InventoryUnitServices {
       res.status(200).json({
         status: ResponseStatus.SUCCESS,
         data,
+      });
+    } catch (err) {
+      logger.error(err.message);
+
+      return next(
+        errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+      );
+    }
+  }
+
+  async viewAvailableMaterialsEachUnit(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const list = await materials();
+
+      res.status(200).json({
+        status: ResponseStatus.SUCCESS,
+        data: list,
       });
     } catch (err) {
       logger.error(err.message);

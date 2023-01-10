@@ -70,4 +70,21 @@ export class ProductServices {
       );
     }
   }
+
+  async reportOfProducts(req: Request, res: Response, next: NextFunction) {
+    try {
+      const products = await Product.find();
+
+      res.status(200).json({
+        status: ResponseStatus.SUCCESS,
+        data: products,
+      });
+    } catch (err) {
+      logger.error(err.message);
+
+      return next(
+        errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+      );
+    }
+  }
 }
