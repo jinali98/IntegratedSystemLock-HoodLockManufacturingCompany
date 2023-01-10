@@ -16,6 +16,21 @@ const logger = LoggerGlobal.getInstance().logger;
 export class OrderRequestsServices {
   private orderRequest = {} as OrderRequestType;
 
+  async checkLowLevelQuantity() {
+    try {
+      const data1 = await InvenotryUnit.find({
+        $expr: { $lte: ["$availableQty", "$lowLevelQty"] },
+      });
+      if (data1.length > 0) {
+        for (const d of data1) {
+          await this.createOrderRequest(d);
+        }
+      }
+    } catch (error) {
+      logger.error(error.message);
+    }
+  }
+
   async createOrderRequest(data) {
     try {
       const { materialid, availableQty, unitid } = data;

@@ -1,6 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
-import express, { Application, NextFunction, Request, Response } from "express";
+import express, {
+  Application,
+  NextFunction,
+  Request,
+  Response,
+  Router,
+} from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import morgan from "morgan";
@@ -17,6 +23,9 @@ import productRouter from "./api/product/product.controller";
 import inventoryRouter from "./api/inventory/inventory.controller";
 import orderRequestsRouter from "./api/orderReq/orderReq.controller";
 import inventoryUnitRouter from "./api/inventoryUnit/inventoryUnit.controller";
+import { Cron } from "../enums/enums";
+import { OrderRequestsServices } from "./service/orderReq/orderReq.service";
+const orderRequestsServices = new OrderRequestsServices();
 
 const logger = LoggerGlobal.getInstance().logger;
 
@@ -32,6 +41,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CRON JOBS
+const starton = new Date(`${process.env.INIT_DATE}`);
+schedule.scheduleJob({ start: starton, rule: Cron.DAILY_CHECK }, () => {
+  orderRequestsServices.checkLowLevelQuantity();
+});
 
 // ROUTES
 app.use("/api/v1/auth", authRouter);

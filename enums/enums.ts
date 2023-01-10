@@ -83,3 +83,7 @@ export enum Designation {
   SUPERVISOR = "supervisor",
   EMPLOYEE = "employee",
 }
+
+export enum Cron {
+  DAILY_CHECK = "0 5 * * *",
+}

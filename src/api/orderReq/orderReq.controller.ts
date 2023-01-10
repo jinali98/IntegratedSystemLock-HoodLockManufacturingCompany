@@ -11,12 +11,13 @@ const validate = new UserInputValidators();
 const tokenService = new TokenServices();
 const authUser = new AuthorizeUsersService();
 
-// orderRequestsRouter.post(
-//   "/",
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     orderRequestsServices.createOrderRequest(req.body);
-//   }
-// );
+// only for demo purposes
+orderRequestsRouter.post(
+  "/",
+  async (req: Request, res: Response, next: NextFunction) => {
+    orderRequestsServices.checkLowLevelQuantity();
+  }
+);
 orderRequestsRouter.get(
   "/warehouse-unit/:type",
   tokenService.verifyUser,
