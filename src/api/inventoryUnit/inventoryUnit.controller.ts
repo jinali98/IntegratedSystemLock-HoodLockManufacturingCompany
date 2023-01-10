@@ -48,4 +48,14 @@ inventoryUnitRouter.get(
   }
 );
 
+// hashan - available inventories of each unit
+inventoryUnitRouter.get(
+  "/report/inventory-unit",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  async (req: Request, res: Response, next: NextFunction) => {
+    inventoryUnitServices.viewAvailableMaterialsEachUnit(req, res, next);
+  }
+);
+
 export default inventoryUnitRouter;

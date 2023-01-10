@@ -1,5 +1,6 @@
 import { Sale } from "../model/sale/sale";
 import { Job } from "../model/job/job";
+import { InvenotryUnit } from "../model/inventoryUnit/inventoryUnit";
 
 //Kavindra jobsCompletedByUnitByPeriod
 export const jobsCompletedByUnitByPeriod = async (
@@ -125,5 +126,18 @@ export const salesByProduct = async (from: Date, to: Date) => {
       },
     },
     { $unwind: "$product" },
+  ]);
+};
+export const materials = async () => {
+  return await InvenotryUnit.aggregate([
+    {
+      $lookup: {
+        from: "invenotries",
+        localField: "materialid",
+        foreignField: "materialid",
+        as: "inventory",
+      },
+    },
+    { $unwind: "$inventory" },
   ]);
 };

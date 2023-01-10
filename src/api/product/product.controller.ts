@@ -39,4 +39,14 @@ productRouter.patch(
   }
 );
 
+// hashan - report of products
+productRouter.get(
+  "/report/products-list",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  async (req: Request, res: Response, next: NextFunction) => {
+    productServices.reportOfProducts(req, res, next);
+  }
+);
+
 export default productRouter;
