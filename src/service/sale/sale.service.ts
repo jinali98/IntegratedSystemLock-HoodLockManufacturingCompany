@@ -1,23 +1,23 @@
-import { Request, Response, NextFunction } from 'express';
-import { ProductType, SaleType } from '../../../types';
-import LoggerGlobal from '../../../logger/loggerSingelton';
-import errorResponseHandler from '../../../utils/errorResponseHandler';
-import { ErrorMessages, ResponseStatus } from '../../../enums/enums';
-import { customAlphabet } from 'nanoid';
-import { Sale } from '../../model/sale/sale';
-import { Product } from '../../model/product/product';
+import { Request, Response, NextFunction } from "express";
+import { ProductType, SaleType } from "../../../types";
+import LoggerGlobal from "../../../logger/loggerSingelton";
+import errorResponseHandler from "../../../utils/errorResponseHandler";
+import { ErrorMessages, ResponseStatus } from "../../../enums/enums";
+import { customAlphabet } from "nanoid";
+import { Sale } from "../../model/sale/sale";
+import { Product } from "../../model/product/product";
 
 import {
   salesByPeriod,
   salesByProduct,
   salesByProductByPeriod,
 } from "../../aggregators/aggregators";
+import {
+  salesIcomeAggregator,
+  totalIncomeAggregator,
+} from "../../aggregators/income.aggregator";
 
-
-
-
-
-const nanoid = customAlphabet('1234567890abcdef', 5);
+const nanoid = customAlphabet("1234567890abcdef", 5);
 const logger = LoggerGlobal.getInstance().logger;
 
 export class SaleServices {
@@ -190,47 +190,69 @@ export class SaleServices {
       );
     }
   }
-    async viewMonthlySales(req: Request, res: Response, next: NextFunction) {
-      const { month, year } = req.body;
-      const fromDate = new Date(`${year}-${month}-01`);
-      const toDate = new Date(`${year}-${month}-31`);
-  
-      try {
-        const list = await salesByProduct(fromDate, toDate);
-  
-        res.status(200).json({
-          status: ResponseStatus.SUCCESS,
-          list,
-        });
-      } catch (err) {
-        logger.error(err.message);
-        return next(
-          errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
-        );
-      }
+  async viewMonthlySales(req: Request, res: Response, next: NextFunction) {
+    const { month, year } = req.body;
+    const fromDate = new Date(`${year}-${month}-01`);
+    const toDate = new Date(`${year}-${month}-31`);
+
+    try {
+      const list = await salesByProduct(fromDate, toDate);
+
+      res.status(200).json({
+        status: ResponseStatus.SUCCESS,
+        list,
+      });
+    } catch (err) {
+      logger.error(err.message);
+      return next(
+        errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+      );
     }
-  
-    async viewYearlySales(req: Request, res: Response, next: NextFunction) {
-      const { year } = req.body;
-      const fromDate = new Date(`${year}-01-01`);
-      const toDate = new Date(`${year}-12-31`);
-  
-      try {
-        const list = await salesByProduct(fromDate, toDate);
-  
-        res.status(200).json({
-          status: ResponseStatus.SUCCESS,
-          list,
-        });
-      } catch (err) {
-        logger.error(err.message);
-        return next(
-          errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
-        );
-      }
+  }
+
+  async viewYearlySales(req: Request, res: Response, next: NextFunction) {
+    const { year } = req.body;
+    const fromDate = new Date(`${year}-01-01`);
+    const toDate = new Date(`${year}-12-31`);
+
+    try {
+      const list = await salesByProduct(fromDate, toDate);
+
+      res.status(200).json({
+        status: ResponseStatus.SUCCESS,
+        list,
+      });
+    } catch (err) {
+      logger.error(err.message);
+      return next(
+        errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+      );
     }
-  
+  }
+  async incomeReport(req: Request, res: Response, next: NextFunction) {
+    const { month, year } = req.body;
+    const fromDate = new Date(`${year}-${month}-01`);
+    const toDate = new Date(`${year}-${month}-31`);
+
+    try {
+      const totalIncome = await totalIncomeAggregator(fromDate, toDate);
+      const incomeSpread = await salesIcomeAggregator(fromDate, toDate);
+
+      res.status(200).json({
+        status: ResponseStatus.SUCCESS,
+        data: {
+          income: totalIncome[0].income,
+          dateFrom: totalIncome[0].dateFrom,
+          dateTo: totalIncome[0].dateTo,
+
+          incomeSpread,
+        },
+      });
+    } catch (err) {
+      logger.error(err.message);
+      return next(
+        errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+      );
+    }
+  }
 }
-
-
- 
