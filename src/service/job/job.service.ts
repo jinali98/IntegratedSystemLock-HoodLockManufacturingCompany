@@ -12,6 +12,7 @@ import { customAlphabet } from 'nanoid';
 import { Job } from '../../model/job/job';
 import { InvenotryUnit } from '../../model/inventoryUnit/inventoryUnit';
 import { jobsCompletedByUnitByPeriod } from '../../aggregators/aggregators';
+import { taskByEmpByPeriod } from "../../aggregators/aggregators";
 const nanoid = customAlphabet('1234567890abcdef', 5);
 const logger = LoggerGlobal.getInstance().logger;
 
@@ -175,4 +176,33 @@ export class JobServices {
       );
     }
   }
+    async completeJobsByEmpWithinSelectedTime(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const empid = req.params.empid;
+    const { from, to } = req.body;
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+
+    try {
+      const data = await taskByEmpByPeriod(fromDate, toDate, empid);
+      res.status(200).json({
+        status: ResponseStatus.SUCCESS,
+        data,
+      });
+    } catch (err) {
+      logger.error(err.message);
+
+      return next(
+        errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+      );
+    }
+  }
+  
 }
+
+
+
+  

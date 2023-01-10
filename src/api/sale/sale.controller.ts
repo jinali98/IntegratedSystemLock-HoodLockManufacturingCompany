@@ -84,3 +84,27 @@ salesRouter.post(
   }
 );
 export default salesRouter;
+
+// hasna  -monthly sales record
+salesRouter.post(
+  "/report/sales-monthly",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeMonthlyValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    saleServices.viewMonthlySales(req, res, next);
+  }
+);
+
+// hasna  - yearly sales record
+salesRouter.post(
+  "/report/sales-yearly",
+  tokenService.verifyUser,
+  authUser.checkUserRoleAdminHM,
+  sanitize.sanitizeUserInputs,
+  validate.dateRangeYearlyValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    saleServices.viewYearlySales(req, res, next);
+  }
+);

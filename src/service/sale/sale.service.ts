@@ -6,10 +6,16 @@ import { ErrorMessages, ResponseStatus } from '../../../enums/enums';
 import { customAlphabet } from 'nanoid';
 import { Sale } from '../../model/sale/sale';
 import { Product } from '../../model/product/product';
+
 import {
   salesByPeriod,
+  salesByProduct,
   salesByProductByPeriod,
-} from '../../aggregators/aggregators';
+} from "../../aggregators/aggregators";
+
+
+
+
 
 const nanoid = customAlphabet('1234567890abcdef', 5);
 const logger = LoggerGlobal.getInstance().logger;
@@ -184,4 +190,47 @@ export class SaleServices {
       );
     }
   }
+    async viewMonthlySales(req: Request, res: Response, next: NextFunction) {
+      const { month, year } = req.body;
+      const fromDate = new Date(`${year}-${month}-01`);
+      const toDate = new Date(`${year}-${month}-31`);
+  
+      try {
+        const list = await salesByProduct(fromDate, toDate);
+  
+        res.status(200).json({
+          status: ResponseStatus.SUCCESS,
+          list,
+        });
+      } catch (err) {
+        logger.error(err.message);
+        return next(
+          errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+        );
+      }
+    }
+  
+    async viewYearlySales(req: Request, res: Response, next: NextFunction) {
+      const { year } = req.body;
+      const fromDate = new Date(`${year}-01-01`);
+      const toDate = new Date(`${year}-12-31`);
+  
+      try {
+        const list = await salesByProduct(fromDate, toDate);
+  
+        res.status(200).json({
+          status: ResponseStatus.SUCCESS,
+          list,
+        });
+      } catch (err) {
+        logger.error(err.message);
+        return next(
+          errorResponseHandler(500, ErrorMessages.INTERNAL_SERVER_ERROR)
+        );
+      }
+    }
+  
 }
+
+
+ 
