@@ -1,6 +1,5 @@
-import { Sale } from '../model/sale/sale';
+import { Sale } from "../model/sale/sale";
 import { Job } from "../model/job/job";
-
 
 //Kavindra jobsCompletedByUnitByPeriod
 export const jobsCompletedByUnitByPeriod = async (
@@ -15,19 +14,19 @@ export const jobsCompletedByUnitByPeriod = async (
           $gte: from,
           $lte: to,
         },
-        status: 'done',
+        status: "done",
         unitid,
       },
     },
     {
       $lookup: {
-        from: 'employees',
-        localField: 'empid',
-        foreignField: 'empid',
-        as: 'assigned-employee',
+        from: "employees",
+        localField: "empid",
+        foreignField: "empid",
+        as: "assigned-employee",
       },
     },
-    { $unwind: '$assigned-employee' },
+    { $unwind: "$assigned-employee" },
   ]);
 };
 
@@ -43,13 +42,13 @@ export const salesByPeriod = async (from: Date, to: Date) => {
     },
     {
       $lookup: {
-        from: 'products',
-        localField: 'productid',
-        foreignField: 'productid',
-        as: 'product',
+        from: "products",
+        localField: "productid",
+        foreignField: "productid",
+        as: "product",
       },
     },
-    { $unwind: '$product' },
+    { $unwind: "$product" },
   ]);
 };
 
@@ -70,17 +69,15 @@ export const salesByProductByPeriod = async (
     },
     {
       $lookup: {
-        from: 'products',
-        localField: 'productid',
-        foreignField: 'productid',
-        as: 'product',
+        from: "products",
+        localField: "productid",
+        foreignField: "productid",
+        as: "product",
       },
     },
-    { $unwind: '$product' },
+    { $unwind: "$product" },
   ]);
 };
-
-
 
 export const taskByEmpByPeriod = async (
   from: Date,
